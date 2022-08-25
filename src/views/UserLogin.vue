@@ -51,7 +51,7 @@ export default {
       });
 
       if (match) {
-        AuthVue.setUser(match.id);
+        AuthVue.setUser(this.userID);
         this.$router.push({name: 'todolist'});
       } else {
         alert('잘못된 아이디이거나, 비밀번호 입니다.');
