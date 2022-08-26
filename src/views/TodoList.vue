@@ -45,7 +45,7 @@ export default {
     return {
       userLists: userList,
       userID: sessionStorage.getItem('userID'),
-      list: localStorage.getItem('todo')
+      list: JSON.parse(localStorage.getItem('todo'))
     };
   },
   beforeCreate() {},

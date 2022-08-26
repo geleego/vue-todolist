@@ -12,8 +12,8 @@
         <input name="content" v-model="content" type="text" />
       </div>
       <div>
-        <label for="limitData">임박일</label>
-        <input name="limitData" v-model="limitData" type="text" />
+        <label for="limitDate">임박일</label>
+        <input name="limitDate" v-model="limitDate" type="text" />
       </div>
       <div>
         <label for="isSuccess">진행상태</label>
@@ -75,7 +75,7 @@ export default {
       userID: AuthVue.getUser(),
       key: '',  // `todo-${num}`
       content: '',
-      limitData: '',
+      limitDate: '',
       isSuccess: stateOptions[0].value,
       dateCreate: '',
       dateUpdate: '',
@@ -84,31 +84,26 @@ export default {
       stateDelete: ''
     };
   },
-  mounted() {
-  },
   created() {
-    // @TODO: local에 값이 있는지 확인하고, 있으면 items에 미리 값을 넣어둔다.
-    localStorage.getItem('todo')
-    ? this.items.push(JSON.parse(localStorage.getItem('todo'))) // 배열 전체로 오는 문제 조치 필요..
-    : console.log(this.items);
+    // localStorage에 기존 값이 있다면 items에 미리 넣어놓기
+    if (JSON.parse(localStorage.getItem('todo')) !== null) {
+      this.items = JSON.parse(localStorage.getItem('todo'))
+    }
+  },
+  mounted() {
   },
   methods: {
     /**
-     * todo 작성 폼 체크
+     * todo 추가하기 동작
      */
     addDo() {
-      this.content && this.limitData && this.isSuccess
-      ? (
-        this.items.push({
-          content: this.content,
-          limitData: this.limitData,
-          isSuccess: this.isSuccess
-        }),
-        localStorage.setItem('todo', JSON.stringify(this.items))
-        // this.$router.push({ name: 'todolist' })
-      ) : (
-        alert('빈칸을 채워주세요.')
-      )
+      this.items.push({
+        content: this.content,
+        limitDate: this.limitDate,
+        isSuccess: this.isSuccess
+      }),
+      localStorage.setItem('todo', JSON.stringify(this.items)),
+      this.$router.push({ name: 'todolist' })
     }
   }
 };
