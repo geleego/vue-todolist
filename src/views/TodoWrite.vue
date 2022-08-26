@@ -1,19 +1,13 @@
 <template>
   <div class="todoWrite">
-    <header>
-      <h1>TODO LIST</h1>
-      <LoginStateVue />
-    </header>
-
     <form>
-      <!-- 할 일, 임박일, 진행상태, 생성일자, 수정일자, 삭제일자, 완료일자 -->
       <div>
         <label for="content">할 일</label>
-        <input name="content" v-model="content" type="text" />
+        <input name="content" v-model="content" placeholder="할 일을 입력하세요." type="text" />
       </div>
       <div>
         <label for="limitDate">임박일</label>
-        <input name="limitDate" v-model="limitDate" type="text" />
+        <input name="limitDate" v-model="limitDate" type="date" />
       </div>
       <div>
         <label for="isSuccess">진행상태</label>
@@ -23,26 +17,6 @@
           <option value="done">Done</option>
         </select>
       </div>
-      <!-- <div>
-        <label for="dateCreate">생성일자</label>
-        <input name="dateCreate" v-model="dateCreate" type="text" />
-      </div>
-      <div>
-        <label for="dateUpdate">수정일자</label>
-        <input name="dateUpdate" v-model="dateUpdate" type="text" />
-      </div>
-      <div>
-        <label for="dateDelete">삭제일자</label>
-        <input name="dateDelete" v-model="dateDelete" type="text" />
-      </div>
-      <div>
-        <label for="dateSuccess">완료일자</label>
-        <input name="dateSuccess" v-model="dateSuccess" type="text" />
-      </div>
-      <div>
-        <label for="stateDelete">종료상태</label>
-        <input name="stateDelete" v-model="stateDelete" type="text" />
-      </div> -->
 
       <button type="button" @click="addDo">추가하기</button>
     </form>
@@ -50,22 +24,12 @@
 </template>
 
 <script>
-import LoginStateVue from "@/components/login/LoginState.vue";
 import AuthVue from '@/utill/Auth.js';
-
-/**
- * 진행상태 옵션들
- */
-const stateOptions = [
-  { value: 'todo', option: 'To Do' },
-  { value: 'doing', option: 'Doing' },
-  { value: 'done', option: 'Done' },
-];
 
 export default {
   name: 'todoWrite',
   components: {
-    LoginStateVue
+    // LoginStateVue
   },
   data() {
     return {
@@ -73,13 +37,14 @@ export default {
 
       // todo 속성 값
       userID: AuthVue.getUser(),
-      key: '',  // `todo-${num}`
+      // key: `${sessionStorage.getItem('userID')}-${JSON.parse(localStorage.getItem('todo')).find}`,
+      key: `${sessionStorage.getItem('userID')}`,
       content: '',
-      limitDate: '',
-      isSuccess: stateOptions[0].value,
-      dateCreate: '',
-      dateUpdate: '',
-      dateDelete: '',
+      limitDate: this.$moment().format('YYYY-MM-DD'),
+      isSuccess: this.$store.state.stateOptions[0].value,
+      dateCreate: this.$moment().format('YYYY-MM-DD'),
+      dateUpdate: this.$moment().format('YYYY-MM-DD'),
+      dateDelete: this.$moment().format('YYYY-MM-DD'),
       dateSuccess: '',
       stateDelete: ''
     };
@@ -97,13 +62,18 @@ export default {
      * todo 추가하기 동작
      */
     addDo() {
-      this.items.push({
-        content: this.content,
-        limitDate: this.limitDate,
-        isSuccess: this.isSuccess
-      }),
-      localStorage.setItem('todo', JSON.stringify(this.items)),
-      this.$router.push({ name: 'todolist' })
+      if (this.content && this.limitDate && this.isSuccess) {
+        this.items.push({
+          content: this.content,
+          limitDate: this.limitDate,
+          isSuccess: this.isSuccess,
+          dateCreate: this.dateCreate
+        });
+        localStorage.setItem('todo', JSON.stringify(this.items));
+        this.$router.push({ name: 'todolist' });
+      } else {
+        alert('빈칸을 채워주세요.');
+      }
     }
   }
 };

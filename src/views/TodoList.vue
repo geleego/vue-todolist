@@ -1,30 +1,33 @@
 <template>
   <div class="todoList">
-    <header>
-      <h1>TODO LIST</h1>
-      <LoginStateVue />
-    </header>
-
-    <button type="button" @click="goWritePage">
+    <button type="button" @click="todoWrite">
       할 일 추가
     </button>
 
     <table>
       <thead>
         <tr>
-          <th>할 일</th>
-          <th>임박일</th>
-          <th>진행상태</th>
+          <th v-for="(item, index) in this.$store.state.attributes" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in list" v-bind:key="index">
-          <!-- <td v-for="key in item" v-bind:key="key">
-            {{ item[key] }}
-          </td> -->
+        <tr v-for="(item, index) in list" :key="index">
+          <td>{{ item.key }}</td>
           <td>{{ item.content }}</td>
           <td>{{ item.limitDate }}</td>
           <td>{{ item.isSuccess }}</td>
+          <td>{{ item.dateCreate }}</td>
+          <td>{{ item.dateUpdate }}</td>
+          <td>{{ item.dateDelete }}</td>
+          <td>{{ item.dateSuccess }}</td>
+          <td>
+            <button @click="todoEdit">수정하기</button>
+          </td>
+          <td>
+            <button @click="todoDelete">삭제하기</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -33,13 +36,9 @@
 
 <script>
 import userList from "@/assets/users.json";
-import LoginStateVue from "@/components/login/LoginState.vue";
 
 export default {
   name: 'todoList',
-  components: {
-    LoginStateVue,
-  },
   watch: {},
   data() {
     return {
@@ -57,7 +56,13 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    goWritePage() {
+    todoWrite() {
+      this.$router.push({ name: 'todowrite' });
+    },
+    todoEdit() {
+      this.$router.push({ name: 'todowrite' });
+    },
+    todoDelete() {
       this.$router.push({ name: 'todowrite' });
     }
   }
