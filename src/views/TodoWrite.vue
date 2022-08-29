@@ -7,7 +7,7 @@
         <input name="content" v-model="content" placeholder="할 일을 입력하세요." type="text" />
       </div>
       <div>
-        <label for="limitDate">임박일</label>
+        <label for="limitDate">만료일</label>
         <input name="limitDate" v-model="limitDate" type="date" />
       </div>
       <div>
@@ -42,7 +42,8 @@ export default {
       // todo 속성 값
       userID: AuthVue.getUser(),
       // key: `${sessionStorage.getItem('userID')}-${JSON.parse(localStorage.getItem('todo')).find}`,
-      key: `${AuthVue.getUser()}`, // todo 고유키 
+      // key: `${AuthVue.getUser()}`, // todo 고유키 
+      // key: '',
       content: '', // 할일 
       limitDate: this.$moment().format('YYYY-MM-DD'), // 만료일
       isSuccess: this.$store.state.stateOptions[0].value, // 상태값
@@ -59,7 +60,6 @@ export default {
     if (this.list !== null) {
       this.items = this.list
     }
-
   },
   mounted() {
   },

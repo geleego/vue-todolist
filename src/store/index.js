@@ -14,7 +14,7 @@ export default new Vuex.Store({
     attributes : [
       'No.',
       '할 일',
-      '임박일',
+      '만료일',
       '진행상태',
       '생성일자',
       '수정일자',
