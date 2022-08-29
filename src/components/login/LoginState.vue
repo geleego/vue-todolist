@@ -1,7 +1,7 @@
 <template>
   <div class="loginState">
     <b>{{ userID }}</b>님 환영합니다.
-    <button @click="goLogin">로그아웃</button>
+    <button @click="goLogout">로그아웃</button>
   </div>
 </template>
 
@@ -15,8 +15,14 @@ export default {
       userID: AuthVue.getUser(),
     };
   },
+  created() {
+    AuthVue.getUser() ?? this.goLogout()
+    if (!AuthVue.getUser()) {
+      this.goLogout();
+    }
+  },
   methods: {
-    goLogin() {
+    goLogout() {
       AuthVue.logout();
       this.$router.push({name: 'login'});
     }

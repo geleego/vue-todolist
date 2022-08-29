@@ -1,5 +1,6 @@
 <template>
   <div class="todoList">
+    <Header />
     <button type="button" @click="todoWrite">
       할 일 추가
     </button>
@@ -35,10 +36,14 @@
 </template>
 
 <script>
+import Header from "@/components/layout/Header.vue";
 import userList from "@/assets/users.json";
 
 export default {
   name: 'todoList',
+  components: {
+    Header
+  },
   watch: {},
   data() {
     return {

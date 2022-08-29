@@ -1,5 +1,6 @@
 <template>
   <div class="todoWrite">
+    <Header />
     <form>
       <div>
         <label for="content">할 일</label>
@@ -24,12 +25,14 @@
 </template>
 
 <script>
+import Header from "@/components/layout/Header.vue";
 import AuthVue from '@/utill/Auth.js';
 
 export default {
   name: 'todoWrite',
   components: {
     // LoginStateVue
+    Header
   },
   data() {
     return {
@@ -38,15 +41,15 @@ export default {
       // todo 속성 값
       userID: AuthVue.getUser(),
       // key: `${sessionStorage.getItem('userID')}-${JSON.parse(localStorage.getItem('todo')).find}`,
-      key: `${sessionStorage.getItem('userID')}`,
-      content: '',
-      limitDate: this.$moment().format('YYYY-MM-DD'),
-      isSuccess: this.$store.state.stateOptions[0].value,
-      dateCreate: this.$moment().format('YYYY-MM-DD'),
-      dateUpdate: this.$moment().format('YYYY-MM-DD'),
-      dateDelete: this.$moment().format('YYYY-MM-DD'),
-      dateSuccess: '',
-      stateDelete: ''
+      key: `${sessionStorage.getItem('userID')}`, // todo 고유키 
+      content: '', // 할일 
+      limitDate: this.$moment().format('YYYY-MM-DD'), // 만료일
+      isSuccess: this.$store.state.stateOptions[0].value, // 상태값
+      dateCreate: this.$moment().format('YYYY-MM-DD'), // 생성일
+      dateUpdate: this.$moment().format('YYYY-MM-DD'), // 수정일
+      dateDelete: this.$moment().format('YYYY-MM-DD'), // 삭제일 
+      dateSuccess: '', // 완료일 
+      stateDelete: '' // 삭제 값
     };
   },
   created() {
