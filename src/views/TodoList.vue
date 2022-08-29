@@ -37,7 +37,7 @@
 
 <script>
 import Header from "@/components/layout/Header.vue";
-import userList from "@/assets/users.json";
+import AuthVue from '@/utill/Auth.js';
 
 export default {
   name: 'todoList',
@@ -47,13 +47,14 @@ export default {
   watch: {},
   data() {
     return {
-      userLists: userList,
-      userID: sessionStorage.getItem('userID'),
-      list: JSON.parse(localStorage.getItem('todo'))
+      userID: AuthVue.getUser(),
+      list: undefined
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.list = JSON.parse(localStorage.getItem(this.userID));
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},

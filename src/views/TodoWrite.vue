@@ -37,26 +37,29 @@ export default {
   data() {
     return {
       items: [],
+      list: undefined,
 
       // todo 속성 값
       userID: AuthVue.getUser(),
       // key: `${sessionStorage.getItem('userID')}-${JSON.parse(localStorage.getItem('todo')).find}`,
-      key: `${sessionStorage.getItem('userID')}`, // todo 고유키 
+      key: `${AuthVue.getUser()}`, // todo 고유키 
       content: '', // 할일 
       limitDate: this.$moment().format('YYYY-MM-DD'), // 만료일
       isSuccess: this.$store.state.stateOptions[0].value, // 상태값
       dateCreate: this.$moment().format('YYYY-MM-DD'), // 생성일
       dateUpdate: this.$moment().format('YYYY-MM-DD'), // 수정일
-      dateDelete: this.$moment().format('YYYY-MM-DD'), // 삭제일 
+      dateDelete: this.$moment().format('YYYY-MM-DD'), // 삭제일  
       dateSuccess: '', // 완료일 
       stateDelete: '' // 삭제 값
     };
   },
   created() {
     // localStorage에 기존 값이 있다면 items에 미리 넣어놓기
-    if (JSON.parse(localStorage.getItem('todo')) !== null) {
-      this.items = JSON.parse(localStorage.getItem('todo'))
+    this.list = JSON.parse(localStorage.getItem(this.userID));
+    if (this.list !== null) {
+      this.items = this.list
     }
+
   },
   mounted() {
   },
@@ -72,7 +75,7 @@ export default {
           isSuccess: this.isSuccess,
           dateCreate: this.dateCreate
         });
-        localStorage.setItem('todo', JSON.stringify(this.items));
+        localStorage.setItem(`${this.userID}`, JSON.stringify(this.items));
         this.$router.push({ name: 'todolist' });
       } else {
         alert('빈칸을 채워주세요.');
