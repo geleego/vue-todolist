@@ -8,14 +8,13 @@
     <table>
       <thead>
         <tr>
-          <th v-for="(item, index) in this.$store.state.attributes" :key="index">
+          <th v-for="(item, index) in columns" :key="index">
             {{ item }}
           </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in list" :key="index">
-          <td>{{ item.key }}</td>
           <td>{{ item.content }}</td>
           <td>{{ item.limitDate }}</td>
           <td>{{ item.isSuccess }}</td>
@@ -24,10 +23,10 @@
           <td>{{ item.dateDelete }}</td>
           <td>{{ item.dateSuccess }}</td>
           <td>
-            <button @click="todoEdit">수정하기</button>
+            <button @click="todoEdit(item, index)">수정하기</button>
           </td>
           <td>
-            <button @click="todoDelete(item, index)">삭제하기</button>
+            <button @click="todoDelete(index)">삭제하기</button>
           </td>
         </tr>
       </tbody>
@@ -48,17 +47,13 @@ export default {
   data() {
     return {
       userID: AuthVue.getUser(),
-      list: undefined
+      columns: this.$store.state.attributes,
+      list: undefined,
     };
   },
   beforeCreate() {},
   created() {
     this.list = JSON.parse(localStorage.getItem(this.userID));
-
-    // todo key 동적 부여
-    this.list.forEach((item, index) => {
-      item.key = index + 1;
-    });
   },
   beforeMount() {},
   mounted() {},
@@ -70,10 +65,10 @@ export default {
     todoWrite() {
       this.$router.push({ name: 'todowrite' });
     },
-    todoEdit() {
-      this.$router.push({ name: 'todowrite' });
+    todoEdit(item, index) {
+      this.$router.push({ name: 'todoedit', params: { item: item, index: index } });
     },
-    todoDelete(item, index) {
+    todoDelete(index) {
       this.deleteAsk() && (
         this.list.splice(index, 1),
         localStorage.setItem(this.userID, JSON.stringify(this.list))
