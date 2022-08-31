@@ -4,8 +4,12 @@
     <button type="button" @click="todoWrite">
       할 일 추가
     </button>
+    <form>
+      <span>검색</span>
+      <input v-model="search">
+    </form>
 
-    <table>
+    <table v-if="searchData.length">
       <thead>
         <tr>
           <th v-for="(item, index) in columns" :key="index">
@@ -14,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in visual" :key="index">
+        <tr v-for="(item, index) in searchData" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ item.content }}</td>
           <td>{{ item.limitDate }}</td>
@@ -43,16 +47,30 @@ export default {
   components: {
     Header
   },
-  watch: {},
   data() {
     return {
       userID: AuthVue.getUser(),
       columns: this.$store.state.attributes,
       list: [],
+      search: '',
       dateDelete: '',
       stateDelete: 0,  // 0: 유효, 1: 삭제
-      visual: []
+      visual: [],
     };
+  },
+  computed: {
+    searchData() {
+      const searchKey = this.search && this.search.toLowerCase();
+      let data = this.visual;
+      if (searchKey) {
+        data = data.filter((row) => {
+          return Object.keys(row).some((key) => {
+            return String(row[key]).toLowerCase().indexOf(searchKey) > -1;
+          })
+        })
+      }
+      return data;
+    },
   },
   beforeCreate() {},
   created() {
