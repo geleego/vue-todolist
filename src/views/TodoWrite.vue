@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       items: [],
-      list: undefined,
+      list: [],
       userID: AuthVue.getUser(),
       key: '',
       todoID: 1,
@@ -46,13 +46,14 @@ export default {
       isSuccess: this.$store.state.stateOptions[0].value,
       dateCreate: this.$moment().format('YYYY-MM-DD'),
       dateUpdate: '',
+      dateDelete: '',
       dateSuccess: '',
+      stateDelete: 0  // 0: 유효, 1: 삭제
     };
   },
   created() {
     this.list = JSON.parse(localStorage.getItem(this.userID));
-
-    if (!this.list || this.list.length === 0) {
+    if (!this.list || !this.list.length) {
       this.key = `${AuthVue.getUser()}-${this.todoID}`;
     } else {
       // localStorage 기존 값 존재 시, 미리 items에 삽입
@@ -75,6 +76,7 @@ export default {
           isSuccess: this.isSuccess,
           dateSuccess: this.dateSuccess,
           dateCreate: this.dateCreate,
+          stateDelete: this.stateDelete
         });
         localStorage.setItem(`${this.userID}`, JSON.stringify(this.items));
         this.$router.push({ name: 'todolist' });

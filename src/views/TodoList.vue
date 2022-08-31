@@ -14,19 +14,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in list" :key="index">
+        <tr v-for="(item, index) in visual" :key="index">
+          <td>{{ index + 1 }}</td>
           <td>{{ item.content }}</td>
           <td>{{ item.limitDate }}</td>
           <td>{{ item.isSuccess }}</td>
           <td>{{ item.dateCreate }}</td>
           <td>{{ item.dateUpdate }}</td>
-          <td>{{ item.dateDelete }}</td>
           <td>{{ item.dateSuccess }}</td>
           <td>
             <button @click="todoEdit(item, index)">수정하기</button>
           </td>
           <td>
-            <button @click="todoDelete(index)">삭제하기</button>
+            <button @click="todoDelete(item, index)">삭제하기</button>
           </td>
         </tr>
       </tbody>
@@ -48,12 +48,21 @@ export default {
     return {
       userID: AuthVue.getUser(),
       columns: this.$store.state.attributes,
-      list: undefined,
+      list: [],
+      dateDelete: '',
+      stateDelete: 0,  // 0: 유효, 1: 삭제
+      visual: []
     };
   },
   beforeCreate() {},
   created() {
+    // 로컬: 전체 리스트 저장
     this.list = JSON.parse(localStorage.getItem(this.userID));
+
+    // 가시화: stateDelete = 0
+    this.visual = this.list && this.list.length && this.list.filter(l => {
+      return !l.stateDelete;
+    })
   },
   beforeMount() {},
   mounted() {},
@@ -68,10 +77,16 @@ export default {
     todoEdit(item, index) {
       this.$router.push({ name: 'todoedit', params: { item: item, index: index } });
     },
-    todoDelete(index) {
+    todoDelete(item) {
       this.deleteAsk() && (
-        this.list.splice(index, 1),
-        localStorage.setItem(this.userID, JSON.stringify(this.list))
+        item.dateDelete = this.$moment().format('YYYY-MM-DD'),
+        item.stateDelete = 1, // 1: 삭제
+        localStorage.setItem(`${this.userID}`, JSON.stringify(this.list)),
+
+        // 가시화: stateDelete = 0
+        this.visual = this.list.length && this.list.filter(l => {
+          return !l.stateDelete;
+        })
       );
     },
 

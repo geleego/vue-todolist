@@ -12,13 +12,13 @@ export default new Vuex.Store({
       { value: 'done', option: 'Done' },
     ],
     attributes : [
-      // 'No.',
+      'No.',
       '할 일',
       '만료일',
       '진행상태',
       '생성일자',
       '수정일자',
-      '삭제일자',
+      // '삭제일자',
       '완료일자',
       '수정하기',
       '삭제하기'
