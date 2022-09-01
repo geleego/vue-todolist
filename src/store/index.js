@@ -12,7 +12,7 @@ export default new Vuex.Store({
       { value: 'done', option: 'Done' },
     ],
     attributes : [
-      'No.',
+      // '순번',
       '할 일',
       '만료일',
       '진행상태',

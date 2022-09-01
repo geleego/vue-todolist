@@ -4,22 +4,31 @@
     <button type="button" @click="todoWrite">
       할 일 추가
     </button>
-    <form>
+    <form v-if="searchData">
       <span>검색</span>
       <input v-model="search">
     </form>
 
-    <table v-if="searchData.length">
+    <table v-if="searchData && searchData.length">
       <thead>
         <tr>
-          <th v-for="(item, index) in columns" :key="index">
+          <th
+            v-for="(item, index) in columns"
+            :key="index"
+            @click="sortBy(item, index)"
+          >
             {{ item }}
+            <span
+              class="arrow"
+              :class="sortOrders[item] > 0 ? 'asc' : 'dsc'"
+            >
+            </span>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in searchData" :key="index">
-          <td>{{ index + 1 }}</td>
+          <!-- <td>{{ index + 1 }}</td> -->
           <td>{{ item.content }}</td>
           <td>{{ item.limitDate }}</td>
           <td>{{ item.isSuccess }}</td>
@@ -56,19 +65,26 @@ export default {
       dateDelete: '',
       stateDelete: 0,  // 0: 유효, 1: 삭제
       visual: [],
+      sortKey: '',
+      sortOrders: this.$store.state.attributes.reduce((c, key) => (
+        (c[key] = 1), c // 오름차순(1) 설정
+      ), {})
     };
   },
   computed: {
     searchData() {
-      const searchKey = this.search && this.search.toLowerCase();
       let data = this.visual;
+
+      // 검색 필터
+      const searchKey = this.search && this.search.toLowerCase();
       if (searchKey) {
         data = data.filter((row) => {
           return Object.keys(row).some((key) => {
             return String(row[key]).toLowerCase().indexOf(searchKey) > -1;
-          })
-        })
+          });
+        });
       }
+
       return data;
     },
   },
@@ -77,10 +93,15 @@ export default {
     // 로컬: 전체 리스트 저장
     this.list = JSON.parse(localStorage.getItem(this.userID));
 
-    // 가시화: stateDelete = 0
+    // 가시화: stateDelete = 0 설정
     this.visual = this.list && this.list.length && this.list.filter(l => {
       return !l.stateDelete;
-    })
+    });
+
+    // attributes json -> objects 변경
+    this.columns.reduce((o, key) => (
+      (o[key] = 1), o
+    ), {});
   },
   beforeMount() {},
   mounted() {},
@@ -115,7 +136,51 @@ export default {
     deleteAsk() {
       let msg = '정말 삭제하시겠습니까? \n삭제된 데이터는 다시 복구되지 않습니다.'
       return window.confirm(msg);
+    },
+
+    /**
+     * 리스트 정렬
+     * @param {string} item 
+     * @param {number} index 
+     */
+    sortBy(item, index) {
+      // 토글
+      this.sortOrders[item] = this.sortOrders[item] * -1;
+
+      // 리스트 정렬
+      this.visual.sort((a, b) => {
+        let aIndex = Object.values(a)[index];
+        let bIndex = Object.values(b)[index];
+        const sortKey = index;
+        const sortOrders = this.sortOrders;
+        const order = Object.values(sortOrders)[sortKey] || 1;
+        return (aIndex === bIndex ? 0 : aIndex > bIndex ? 1 : -1) * order;
+      })
     }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+th {
+  cursor: pointer;
+}
+.arrow {
+  display: inline-block;
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  margin-left: 5px;
+  opacity: 0.66;
+}
+.arrow.asc {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid rgb(0, 0, 0);
+}
+.arrow.dsc {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid rgb(0, 0, 0);
+}
+</style>
