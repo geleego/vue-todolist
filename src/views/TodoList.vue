@@ -111,10 +111,10 @@ export default {
   destroyed() {},
   methods: {
     todoWrite() {
-      this.$router.push({ name: 'todowrite' });
+      this.$router.push({ name: 'todowrite', params: { pageType: 'write' } });
     },
     todoEdit(item, index) {
-      this.$router.push({ name: 'todoedit', params: { item: item, index: index } });
+      this.$router.push({ name: 'todoedit', params: { pageType: 'edit', item: item, index: index } });
     },
     todoDelete(item) {
       this.deleteAsk() && (
