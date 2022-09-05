@@ -1,7 +1,5 @@
 <template>
   <div>
-    <Header />
-
     <form>
       <div>
         <label for="content">할 일</label>
@@ -24,27 +22,29 @@
         </select>
       </div>
 
-      <div v-if="this.$route.params.pageType === 'write'">
-        <button type="button" @click="todoAdd">추가하기</button>
-      </div>
-      <div v-if="this.$route.params.pageType === 'edit'">
-        <button type="button" @click="todoEdit">수정하기</button>
-        <button type="button" @click="back">취소하기</button>
-      </div>
+      <button
+        v-if="this.$route.params.pageType === 'write'"
+        type="button"
+        @click="todoAdd"
+      >
+        추가하기
+      </button>
+      <button v-else type="button" @click="todoEdit">
+        수정하기
+      </button>
+      <button type="button" @click="back">취소하기</button>
      
     </form>
   </div>
 </template>
 
 <script>
-import Header from "@/components/layout/Header.vue";
 import AuthVue from "@/utill/Auth.js";
+import Confirm from "@/components/common/WindowConfirm.js";
 
 export default {
   name: 'todoForm',
-  components: {
-    Header
-  },
+  components: {},
   props: {
     item: Object,
     index: Number,
@@ -143,18 +143,16 @@ export default {
      * 수정하지 않고, 뒤로 돌아가기
      */
     back() {
-      this.noEditAsk() && (
-        this.$router.push({ name: 'todolist' })
-      );
+      this.cancelAsk() && this.$router.back();
     },
 
     /**
      * 수정취소 질문 alert
      * @return {boolean}
      */
-    noEditAsk() {
-      let msg = '수정을 취소하시겠습니까? \n취소한 내용은 적용되지 않습니다.'
-      return window.confirm(msg);
+    cancelAsk() {
+      let msg = '취소하시겠습니까? \n취소한 내용은 저장되지 않습니다.';
+      return Confirm.methods.askAlert(msg);
     },
 
     /**

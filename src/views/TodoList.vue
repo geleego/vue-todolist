@@ -1,12 +1,13 @@
 <template>
   <div class="todoList">
-    <Header />
+    <Header subTitle="할 일 목록" />
     <button type="button" @click="todoWrite">
       할 일 추가
     </button>
+    
     <form v-if="searchData">
       <span>검색</span>
-      <input v-model="search">
+      <input @input="changeSearch">
     </form>
 
     <table v-if="searchData && searchData.length">
@@ -54,7 +55,7 @@ import AuthVue from '@/utill/Auth.js';
 export default {
   name: 'todoList',
   components: {
-    Header
+    Header,
   },
   data() {
     return {
@@ -75,16 +76,14 @@ export default {
     searchData() {
       let data = this.visual;
 
-      // 검색 필터
-      const searchKey = this.search && this.search.toLowerCase();
-      if (searchKey) {
+      if (this.search) {
         data = data.filter((row) => {
-          return Object.keys(row).some((key) => {
-            return String(row[key]).toLowerCase().indexOf(searchKey) > -1;
+          // key, stateDelete 속성 검색 제외
+          return Object.keys(row).filter(v => v !== 'key' && v !== 'stateDelete').some((key) => {
+            return String(row[key]).toLowerCase().indexOf(this.search.toLowerCase()) > -1;
           });
-        });
+        });        
       }
-
       return data;
     },
   },
@@ -127,6 +126,14 @@ export default {
           return !l.stateDelete;
         })
       );
+    },
+
+    /**
+     * 한글입력 즉시 반영
+     * @param {Event} e 
+     */
+    changeSearch(e) {
+      this.search = e.target.value;
     },
 
     /**

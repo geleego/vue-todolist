@@ -1,6 +1,6 @@
 <template>
   <div class="userLogin">
-    <h1>로그인</h1>
+    <Header subTitle="로그인" />
     <div>
       <label for="userID">아이디</label>
       <br />
@@ -30,11 +30,15 @@
 </template>
 
 <script>
+import Header from "@/components/layout/Header.vue";
 import userList from "@/assets/users.json";
 import AuthVue from '@/utill/Auth.js';
 
 export default {
   name: 'userLogin',
+  components: {
+    Header
+  },
   data() {
     return {
       userID: '',
