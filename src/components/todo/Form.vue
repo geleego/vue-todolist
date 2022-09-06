@@ -62,7 +62,7 @@ export default {
       limitDate: this.$moment().format('YYYY-MM-DD'),
       isSuccess: this.$store.state.stateOptions[0].value,
       dateCreate: this.$moment().format('YYYY-MM-DD'),
-      dateUpdate: this.$moment().format('YYYY-MM-DD'),
+      dateUpdate: '',
       dateDelete: '',
       dateSuccess: '',
       stateDelete: 0, // 0: 유효, 1: 삭제
@@ -100,8 +100,9 @@ export default {
           content: this.content,
           limitDate: this.limitDate,
           isSuccess: this.isSuccess,
-          dateSuccess: this.dateSuccess,
           dateCreate: this.dateCreate,
+          dateUpdate: this.dateUpdate,
+          dateSuccess: this.dateSuccess,
           stateDelete: this.stateDelete
         });
         localStorage.setItem(`${this.userID}`, JSON.stringify(this.items));
@@ -110,16 +111,18 @@ export default {
         this.blankAlert();
       }
     },
-
     todoEdit() {
       if(this.content && this.limitDate && this.isSuccess) {
         let item = this.list[this.$route.params.index];
+        item.key,
         item.content = this.content;
         item.limitDate = this.limitDate;
         item.isSuccess = this.isSuccess;
-        item.content = this.content;
+        item.dateCreate = this.dateCreate,
         item.dateUpdate = this.dateUpdate;
+        item.dateUpdate = this.$moment().format('YYYY-MM-DD');
         item.dateSuccess = this.dateSuccess;
+        item.stateDelete = this.stateDelete
 
         localStorage.setItem(`${this.userID}`, JSON.stringify(this.list));
         this.$router.push({ name: 'todolist' });

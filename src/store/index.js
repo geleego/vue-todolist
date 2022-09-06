@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {  // 프로젝트 공통 사용 변수 정의
     /* 테이블 속성 */
     attributes : [
-      // '순번',
+      '순번',
       '할 일',
       '만료일',
       '진행상태',

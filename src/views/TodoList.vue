@@ -20,6 +20,7 @@
           >
             {{ item }}
             <span
+              v-if="item !== '순번' && item !== '수정하기' && item !== '삭제하기'"
               class="arrow"
               :class="sortOrders[item] > 0 ? 'asc' : 'dsc'"
             >
@@ -29,7 +30,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in searchData" :key="index">
-          <!-- <td>{{ index + 1 }}</td> -->
+          <td>{{ index + 1 }}</td>
           <td>{{ item.content }}</td>
           <td>{{ item.limitDate }}</td>
           <td>{{ item.isSuccess }}</td>
@@ -91,23 +92,17 @@ export default {
   created() {
     // 로컬: 전체 리스트 저장
     this.list = JSON.parse(localStorage.getItem(this.userID));
-
+    
     // 가시화: stateDelete = 0 설정
     this.visual = this.list && this.list.length && this.list.filter(l => {
       return !l.stateDelete;
     });
-
+    
     // attributes json -> objects 변경
     this.columns.reduce((o, key) => (
       (o[key] = 1), o
-    ), {});
+      ), {});
   },
-  beforeMount() {},
-  mounted() {},
-  beforeUpdate() {},
-  updated() {},
-  beforeDestroy() {},
-  destroyed() {},
   methods: {
     todoWrite() {
       this.$router.push({ name: 'todowrite', params: { pageType: 'write' } });
@@ -154,10 +149,11 @@ export default {
       // 토글
       this.sortOrders[item] = this.sortOrders[item] * -1;
 
-      // 리스트 정렬
+      // 리스트 정렬 
       this.visual.sort((a, b) => {
         let aIndex = Object.values(a)[index];
         let bIndex = Object.values(b)[index];
+
         const sortKey = index;
         const sortOrders = this.sortOrders;
         const order = Object.values(sortOrders)[sortKey] || 1;
