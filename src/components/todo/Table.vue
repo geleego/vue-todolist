@@ -122,7 +122,6 @@ export default {
      * @param {Event} e 
      */
     changeSearch(e) {
-      console.log('e: ', e, e.target.value);
       this.search = e.target.value;
     },
 
