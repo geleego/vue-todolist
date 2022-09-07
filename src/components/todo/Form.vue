@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import Confirm from "@/components/common/WindowConfirm.js";
+import { EventBus } from "@/utill/EventBus";
 
 export default {
   name: 'todoForm',
@@ -145,19 +145,10 @@ export default {
      * 수정하지 않고, 뒤로 돌아가기
      */
     back() {
-      if (this.cancelAsk()) {
-        this.$router.back();
-      }
-    },
-
-    /**
-     * 수정취소 질문 alert
-     * @return {boolean}
-     */
-    cancelAsk() {
       let msg = '취소하시겠습니까? \n취소한 내용은 저장되지 않습니다.';
-      let result = Confirm.methods.askAlert(msg)
-      return result
+      EventBus.$emit('confirm', { confirmMsg: msg, callback: () => {
+        this.$router.back();
+      }});
     },
 
     /**
