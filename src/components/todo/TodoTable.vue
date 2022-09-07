@@ -2,7 +2,10 @@
   <div>
     <form v-if="searchData">
       <span>검색</span>
-      <input type='text' @input="changeSearch">
+      <input
+        type='text'
+        @input="changeSearch"
+      >
     </form>
 
     <table v-if="searchData && searchData.length">
@@ -24,7 +27,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in searchData" :key="index">
+        <tr
+          v-for="(item, index) in searchData"
+          :key="index"
+        >
           <td>{{ index + 1 }}</td>
           <td>{{ item.content }}</td>
           <td>{{ item.limitDate }}</td>
@@ -48,10 +54,6 @@
 
 export default {
   name: 'todoTable',
-  components: {},
-  props: {
-  },
-  emit: {},
   data() {
     return {
       userID: this.$getUser(),
@@ -82,7 +84,6 @@ export default {
       return data;
     },
   },
-  beforeCreate() {},
   created() {
     // 로컬: 전체 리스트 저장
     this.list = JSON.parse(localStorage.getItem(this.userID));

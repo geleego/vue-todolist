@@ -30,8 +30,4 @@ export default new Vuex.Store({
   },
   mutations: {  // state 변경 (commit) - 동기처리 시 사용
   },
-  actions: {    // mutations 실행 (dispatch) - 비동기처리 시 사용
-  },
-  modules: {
-  }
 })

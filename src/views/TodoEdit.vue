@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Header from "@/components/layout/Header.vue";
-import Form from "@/components/todo/Form.vue";
+import Header from "@/components/layout/HeaderLayout.vue";
+import Form from "@/components/todo/TodoForm.vue";
 
 export default {
   name: 'todoEdit',

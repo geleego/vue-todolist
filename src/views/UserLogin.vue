@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Header from "@/components/layout/Header.vue";
+import Header from "@/components/layout/HeaderLayout.vue";
 import userList from "@/assets/users.json";
 
 export default {

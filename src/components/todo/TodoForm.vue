@@ -3,15 +3,29 @@
     <form>
       <div>
         <label for="content">할 일</label>
-        <input name="content" v-model="content" placeholder="할 일을 입력하세요." type="text" />
+        <input
+          name="content"
+          v-model="content"
+          placeholder="할 일을 입력하세요."
+          type="text"
+        />
       </div>
       <div>
         <label for="limitDate">만료일</label>
-        <input name="limitDate" v-model="limitDate" type="date" />
+        <input
+          name="limitDate"
+          v-model="limitDate"
+          type="date"
+        />
       </div>
       <div>
         <label for="isSuccess">진행상태</label>
-        <select name="isSuccess" v-model="isSuccess" @change="onSuccess" required>
+        <select
+          name="isSuccess"
+          v-model="isSuccess"
+          @change="onSuccess"
+          required
+        >
           <option
             v-for="option in this.$store.state.stateOptions"
             :key="option.value"
@@ -29,11 +43,19 @@
       >
         추가하기
       </button>
-      <button v-else type="button" @click="todoEdit">
+      <button
+        v-else
+        type="button"
+        @click="todoEdit"
+      >
         수정하기
       </button>
-      <button type="button" @click="back">취소하기</button>
-     
+      <button
+        type="button"
+        @click="back"
+        >
+        취소하기
+      </button>
     </form>
   </div>
 </template>
@@ -43,13 +65,11 @@ import { EventBus } from "@/utill/EventBus";
 
 export default {
   name: 'todoForm',
-  components: {},
   props: {
     item: Object,
     index: Number,
     pageType: String
   },
-  emit: {},
   data() {
     return {
       items: [],

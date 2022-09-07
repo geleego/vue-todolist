@@ -5,7 +5,10 @@
       <h2>
         {{ subTitle }}
       </h2>
-      <LoginStateVue v-if="this.$getUser()" :userID="this.$getUser()" />
+      <LoginStateVue
+        v-if="this.$getUser()"
+        :userID="this.$getUser()"
+      />
     </header>
   </div>
 </template>
@@ -20,9 +23,6 @@ export default {
   },
   props: {
     subTitle: String
-  },
-  data() {
-    return {}
   },
   momonted() {
     if (!this.$getUser() && window.location.pathname === !'/') {
