@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import AuthVue from "@/utill/Auth.js";
 import Confirm from "@/components/common/WindowConfirm.js";
 
 export default {
@@ -55,7 +54,7 @@ export default {
     return {
       items: [],
       list: [],
-      userID: AuthVue.getUser(),
+      userID: this.$getUser(),
       key: '',
       todoID: 1,
       content: '',
@@ -74,14 +73,14 @@ export default {
 
     if(this.$route.params.pageType === 'write') {
       if (!this.list || !this.list.length) {
-        this.key = `${AuthVue.getUser()}-${this.todoID}`;
+        this.key = `${this.$getUser()}-${this.todoID}`;
       } else {
         // localStorage 기존 값 존재 시, 미리 items에 삽입
         this.items = this.list;
         // key 부여
         let lastKey = this.items[this.items.length - 1].key;  // list 마지막 배열 key 값
         this.todoID = Number(lastKey.split('-')[1]) + 1;      // index 값 + 1
-        this.key = `${AuthVue.getUser()}-${this.todoID}`;     // todo 고유 key 생성
+        this.key = `${this.$getUser()}-${this.todoID}`;     // todo 고유 key 생성
       }
     } else {
       this.initItem = this.$route.params.item;
@@ -146,7 +145,9 @@ export default {
      * 수정하지 않고, 뒤로 돌아가기
      */
     back() {
-      this.cancelAsk() && this.$router.back();
+      if (this.cancelAsk()) {
+        this.$router.back();
+      }
     },
 
     /**
@@ -155,7 +156,8 @@ export default {
      */
     cancelAsk() {
       let msg = '취소하시겠습니까? \n취소한 내용은 저장되지 않습니다.';
-      return Confirm.methods.askAlert(msg);
+      let result = Confirm.methods.askAlert(msg)
+      return result
     },
 
     /**

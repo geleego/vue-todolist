@@ -32,7 +32,6 @@
 <script>
 import Header from "@/components/layout/Header.vue";
 import userList from "@/assets/users.json";
-import AuthVue from '@/utill/Auth.js';
 
 export default {
   name: 'userLogin',
@@ -55,8 +54,8 @@ export default {
       });
 
       if (match) {
-        AuthVue.setUser(this.userID);
-        this.$router.push({name: 'todolist'});
+        this.$setUser(this.userID);
+        this.$router.push({ name: 'todolist' });
       } else {
         alert('잘못된 아이디이거나, 비밀번호 입니다.');
       }

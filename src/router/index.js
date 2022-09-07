@@ -28,11 +28,11 @@ const routes = [
     name: 'todoedit',
     component: TodoEdit
   }
-]
+];
 
 const router = new VueRouter({
   mode: 'history',
   routes
-})
+});
 
-export default router
+export default router;
